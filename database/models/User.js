@@ -1,5 +1,6 @@
 import bookshelf from '../bookshelf'
 import Role from './Role'
+import Application from './Application'
 
 export default bookshelf.Model.extend({
   tableName: 'users',
@@ -7,6 +8,9 @@ export default bookshelf.Model.extend({
   uuid: true,
   role: function () {
     return this.belongsTo(Role)
+  },
+  application: function () {
+    return this.belongsToMany(Application)
   },
   toJSON: function () {
     const attrs = bookshelf.Model.prototype.toJSON.apply(this, arguments)
