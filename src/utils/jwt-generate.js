@@ -5,7 +5,7 @@ const generateJWT = (user = {}) => {
   const { id, username, role } = user
   return {
     ...user,
-    token: jwt.sign({ sub: { id, username, roleName: role.name } }, JWT_SECRET)
+    token: jwt.sign({ sub: { id, username, roleName: role.name } }, JWT_SECRET, { expiresIn: '4h' })
   }
 }
 
