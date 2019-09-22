@@ -1,4 +1,5 @@
 import User from '../../database/models/User'
+import Role from '../../database/models/Role'
 import RoleFactory from './role-factory'
 import {
   hashPassword,
@@ -7,10 +8,11 @@ import {
   emailGenerator
 } from '../../src/utils'
 
-export default async () => {
-  const password = 'test123'
+export default async (roleName = 'admin') => {
+  const password    = 'test123'
 
-  const role = await RoleFactory()
+  let role = await new Role({ name: roleName })
+    .save()
 
   let user = await new User({
     name: stringGenerator(),

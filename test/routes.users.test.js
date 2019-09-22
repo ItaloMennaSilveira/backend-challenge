@@ -1,7 +1,8 @@
 /* eslint-env jest */
 import app from '../src/config/server'
+import User from '../database/models/User'
 import request from 'supertest'
-import { Database, emailGenerator } from '../src/utils'
+import { Database, emailGenerator, generateJWT } from '../src/utils'
 import UserFactory from './factory/user-factory'
 import RoleFactory from './factory/role-factory'
 
@@ -57,6 +58,27 @@ describe('TEST USERS', () => {
     })
   })
 
+  describe('POST /v1/users/register_candidate', () => {
+    test('should register a candidate', async () => {
+      const role = await RoleFactory()
+
+      const response = await request(server)
+        .post('/v1/users/register_candidate')
+        .set('Authorization', user.token)
+        .send({
+          name: 'User Candidate Test',
+          email: emailGenerator(),
+          password: 'test123',
+          role_id: role.id
+        })
+      expect(response.status).toEqual(200)
+      expect(response.type).toEqual('application/json')
+      expect(Object.keys(response.body)).toEqual(
+        expect.arrayContaining(['id', 'name', 'email', 'role'])
+      )
+    })
+  })
+
   describe('GET /v1/users', () => {
     test('should return a list of users', async () => {
       const response = await request(server)
@@ -85,7 +107,6 @@ describe('TEST USERS', () => {
 
   describe('PUT /v1/users', () => {
     test('should update a user', async () => {
-      const role = await RoleFactory()
       const response = await request(server)
         .put(`/v1/users/${user.id}`)
         .set('Authorization', user.token)
@@ -93,7 +114,7 @@ describe('TEST USERS', () => {
           name: 'User Test Update',
           email: emailGenerator(),
           password: 'update123',
-          role_id: role.id
+          role_id: user.role.id
         })
       expect(response.status).toEqual(200)
       expect(response.type).toEqual('application/json')
