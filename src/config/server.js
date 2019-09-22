@@ -38,13 +38,11 @@ app.use(async (ctx, next) => {
 app.use(koaBody({ multipart: true }))
 
 app.use(jwt({
-  secret: JWT_SECRET,
-  jwtMiddleware
+  secret: JWT_SECRET
 }).unless({
   path: [
     '/v1/users/login',
     '/v1/users/signup',
-    '/v1/roles',
     '/public'
   ]
 }))
