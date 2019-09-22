@@ -1,0 +1,697 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "Backend Challenge API description.\n",
+    "version" : "1.0.0",
+    "title" : "Backend Challenge",
+    "contact" : {
+      "email" : "italo.menna.silveira@gmail.com"
+    }
+  },
+  "host" : "virtserver.swaggerhub.com",
+  "basePath" : "/ItaloMennaSilveira/Backend-challenge/1.0.0",
+  "tags" : [ {
+    "name" : "user"
+  }, {
+    "name" : "role"
+  }, {
+    "name" : "job"
+  }, {
+    "name" : "application"
+  } ],
+  "schemes" : [ "https" ],
+  "paths" : {
+    "/users/signup" : {
+      "post" : {
+        "tags" : [ "user" ],
+        "summary" : "Create user",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Attributes required to create user",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/body"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Return the created user"
+          },
+          "400" : {
+            "description" : "BadRequest - The json data is malformed"
+          },
+          "500" : {
+            "description" : "InternalServerError - The API did something wrong"
+          }
+        }
+      }
+    },
+    "/users/login" : {
+      "post" : {
+        "tags" : [ "user" ],
+        "summary" : "Authenticate a user",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Email and pass",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/body_1"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Return a logged user with your token"
+          },
+          "401" : {
+            "description" : "Unauthorized - User not found or Incorrect password"
+          }
+        }
+      }
+    },
+    "/users/register_candidate" : {
+      "post" : {
+        "tags" : [ "user" ],
+        "summary" : "Register an user with cadidate role",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Attributes required to create user with candidate role",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/body_2"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Return a created candidate"
+          },
+          "400" : {
+            "description" : "BadRequest - The json data is malformed"
+          },
+          "401" : {
+            "description" : "Unauthorized - You are not ADMIN"
+          },
+          "500" : {
+            "description" : "InternalServerError - The API did something wrong"
+          }
+        }
+      }
+    },
+    "/users/" : {
+      "get" : {
+        "tags" : [ "user" ],
+        "summary" : "List of users",
+        "produces" : [ "application/json" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Return a list of users"
+          },
+          "500" : {
+            "description" : "InternalServerError - The API did something wrong"
+          }
+        }
+      }
+    },
+    "/users/:id" : {
+      "get" : {
+        "tags" : [ "user" ],
+        "summary" : "Get user by user id",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The id that needs to be fetched.",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Return an user"
+          },
+          "404" : {
+            "description" : "NotFound - The requested resource couldn't be found"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "user" ],
+        "summary" : "Update an user",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The id that needs to be fetched.",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Update user object",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/User"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Return an updated user"
+          },
+          "401" : {
+            "description" : "Unauthorized - You are not ADMIN"
+          },
+          "404" : {
+            "description" : "NotFound - The requested resource couldn't be found"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "user" ],
+        "summary" : "Delete an user",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The id that needs to be deleted",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Return id of deleted"
+          },
+          "401" : {
+            "description" : "Unauthorized - You are not ADMIN"
+          },
+          "404" : {
+            "description" : "NotFound - The requested resource couldn't be found"
+          }
+        }
+      }
+    },
+    "/roles/" : {
+      "get" : {
+        "tags" : [ "role" ],
+        "summary" : "List of roles",
+        "produces" : [ "application/json" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Return a list of roles"
+          },
+          "500" : {
+            "description" : "InternalServerError - The API did something wrong"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "role" ],
+        "summary" : "Create a role",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "attributes required to create user",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/body_3"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Return the created role"
+          },
+          "400" : {
+            "description" : "BadRequest - The json data is malformed"
+          },
+          "401" : {
+            "description" : "Unauthorized - You are not ADMIN"
+          }
+        }
+      }
+    },
+    "/roles/:id" : {
+      "get" : {
+        "tags" : [ "role" ],
+        "summary" : "Get role by role id",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The id that needs to be fetched.",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Return a role"
+          },
+          "404" : {
+            "description" : "NotFound - The requested resource couldn't be found"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "role" ],
+        "summary" : "Update a role",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Update role object",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Role"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Return an updated role"
+          },
+          "401" : {
+            "description" : "Unauthorized - You are not ADMIN"
+          },
+          "404" : {
+            "description" : "NotFound - The requested resource couldn't be found"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "role" ],
+        "summary" : "Delete a role",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The id that needs to be deleted",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Return id of deleted"
+          },
+          "401" : {
+            "description" : "Unauthorized - You are not ADMIN"
+          },
+          "404" : {
+            "description" : "NotFound - The requested resource couldn't be found"
+          }
+        }
+      }
+    },
+    "/jobs/" : {
+      "get" : {
+        "tags" : [ "job" ],
+        "summary" : "List of jobs",
+        "produces" : [ "application/json" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Return a list of jobs"
+          },
+          "500" : {
+            "description" : "InternalServerError - The API did something wrong"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "job" ],
+        "summary" : "Create a job",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "attributes required to create job",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/body_4"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Return the created job"
+          },
+          "400" : {
+            "description" : "BadRequest - The json data is malformed"
+          },
+          "401" : {
+            "description" : "Unauthorized - You are not ADMIN"
+          }
+        }
+      }
+    },
+    "/jobs/:id" : {
+      "get" : {
+        "tags" : [ "job" ],
+        "summary" : "Get job by job id",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The id that needs to be fetched.",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Return a job"
+          },
+          "404" : {
+            "description" : "NotFound - The requested resource couldn't be found"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "job" ],
+        "summary" : "Update a job",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The id that needs to be fetched.",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Updated job object",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Job"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Return an updated job"
+          },
+          "401" : {
+            "description" : "Unauthorized - You are not ADMIN"
+          },
+          "404" : {
+            "description" : "NotFound - The requested resource couldn't be found"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "job" ],
+        "summary" : "Delete a job",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The id that needs to be deleted",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Return id of deleted"
+          },
+          "401" : {
+            "description" : "Unauthorized - You are not ADMIN"
+          },
+          "404" : {
+            "description" : "NotFound - The requested resource couldn't be found"
+          }
+        }
+      }
+    },
+    "/applications/" : {
+      "get" : {
+        "tags" : [ "application" ],
+        "summary" : "List of applications",
+        "produces" : [ "application/json" ],
+        "parameters" : [ ],
+        "responses" : {
+          "200" : {
+            "description" : "Return a list of applications"
+          },
+          "500" : {
+            "description" : "InternalServerError - The API did something wrong"
+          }
+        }
+      },
+      "post" : {
+        "tags" : [ "application" ],
+        "summary" : "Create an application",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "attributes required to create application",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/body_5"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Return the created application"
+          },
+          "400" : {
+            "description" : "BadRequest - The json data is malformed"
+          },
+          "401" : {
+            "description" : "Unauthorized - You are not ADMIN or Only role as candidate'"
+          },
+          "404" : {
+            "description" : "NotFound - The requested resource couldn't be found"
+          }
+        }
+      }
+    },
+    "/applications/:id" : {
+      "get" : {
+        "tags" : [ "application" ],
+        "summary" : "Get application by application id",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The id that needs to be fetched.",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Return an application"
+          },
+          "404" : {
+            "description" : "NotFound - The requested resource couldn't be found"
+          }
+        }
+      },
+      "put" : {
+        "tags" : [ "application" ],
+        "summary" : "Update an application",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "body",
+          "name" : "body",
+          "description" : "Update application object",
+          "required" : true,
+          "schema" : {
+            "$ref" : "#/definitions/Application"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Return an updated application"
+          },
+          "401" : {
+            "description" : "Unauthorized - You are not ADMIN"
+          },
+          "404" : {
+            "description" : "NotFound - The requested resource couldn't be found"
+          }
+        }
+      },
+      "delete" : {
+        "tags" : [ "application" ],
+        "summary" : "Delete an application",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "name" : "id",
+          "in" : "path",
+          "description" : "The id that needs to be deleted",
+          "required" : true,
+          "type" : "string"
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Return id of deleted"
+          },
+          "400" : {
+            "description" : "BadRequest - The json data is malformed"
+          },
+          "401" : {
+            "description" : "Unauthorized - You are not ADMIN"
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "User" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "string"
+        },
+        "name" : {
+          "type" : "string"
+        },
+        "email" : {
+          "type" : "string"
+        },
+        "phone" : {
+          "type" : "string"
+        },
+        "cpf" : {
+          "type" : "string"
+        },
+        "role_id" : {
+          "type" : "string"
+        }
+      },
+      "xml" : {
+        "name" : "User"
+      }
+    },
+    "Role" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "string"
+        },
+        "name" : {
+          "type" : "string"
+        }
+      },
+      "xml" : {
+        "name" : "Role"
+      }
+    },
+    "Job" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "string"
+        },
+        "description" : {
+          "type" : "string"
+        }
+      },
+      "xml" : {
+        "name" : "Job"
+      }
+    },
+    "Application" : {
+      "type" : "object",
+      "properties" : {
+        "id" : {
+          "type" : "string"
+        },
+        "commentary" : {
+          "type" : "string"
+        },
+        "job_id" : {
+          "type" : "string"
+        },
+        "user_id" : {
+          "type" : "string"
+        }
+      },
+      "xml" : {
+        "name" : "Application"
+      }
+    },
+    "body" : {
+      "type" : "object",
+      "properties" : {
+        "name" : {
+          "type" : "string"
+        },
+        "email" : {
+          "type" : "string"
+        },
+        "phone" : {
+          "type" : "string"
+        },
+        "cpf" : {
+          "type" : "string"
+        },
+        "role_id" : {
+          "type" : "string"
+        }
+      }
+    },
+    "body_1" : {
+      "type" : "object",
+      "properties" : {
+        "email" : {
+          "type" : "string"
+        },
+        "password" : {
+          "type" : "string"
+        }
+      }
+    },
+    "body_2" : {
+      "type" : "object",
+      "properties" : {
+        "name" : {
+          "type" : "string"
+        },
+        "email" : {
+          "type" : "string"
+        },
+        "phone" : {
+          "type" : "string"
+        },
+        "cpf" : {
+          "type" : "string"
+        },
+        "role_id" : {
+          "type" : "string"
+        }
+      }
+    },
+    "body_3" : {
+      "type" : "object",
+      "properties" : {
+        "name" : {
+          "type" : "string"
+        }
+      }
+    },
+    "body_4" : {
+      "type" : "object",
+      "properties" : {
+        "description" : {
+          "type" : "string"
+        }
+      }
+    },
+    "body_5" : {
+      "type" : "object",
+      "properties" : {
+        "commentary" : {
+          "type" : "string"
+        },
+        "user_id" : {
+          "type" : "string"
+        },
+        "job_id" : {
+          "type" : "string"
+        }
+      }
+    }
+  }
+}
