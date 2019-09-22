@@ -6,11 +6,10 @@ const router = new Router()
 const ctrl = new UserController()
 const valid = new UserValidate()
 
-router.get('/users', ctrl.index)
-
 router.post('/users/signup', valid.create(), ctrl.create)
 router.post('/users/login', ctrl.login)
-
+router.post('/users/register_candidate', valid.create(), ctrl.createCandidate)
+router.get('/users', ctrl.index)
 router.get('/users/:id', ctrl.show)
 router.put('/users/:id', valid.update(), ctrl.update)
 router.delete('/users/:id', ctrl.destroy)

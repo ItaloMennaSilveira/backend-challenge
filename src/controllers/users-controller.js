@@ -18,18 +18,42 @@ export default class Controller {
       .catch(() => { throw new Unauthorized() })
 
     if (!user) {
-      throw new Unauthorized('Usuario não encontrado')
+      throw new Unauthorized('User not found')
     }
 
     const isValid = await bcrypt.compare(body.password, user.attributes.password)
 
     if (!isValid) {
-      throw new Unauthorized('Senha Incorreta')
+      throw new Unauthorized('Incorrect password')
     }
 
     user.attributes = generateJWT(user.toJSON())
 
     ctx.body = user
+  }
+
+  async createCandidate (ctx) {
+    const { body } = ctx.request
+    const { user } = ctx.state
+
+    if (user.sub.roleName != 'admin') {
+      throw new Unauthorized('You are not ADMIN')
+    }
+
+    body.password = await hashPassword(body.password)
+
+    const savedUser = await new User({
+      name: body.name,
+      email: body.email,
+      password: body.password,
+      role_id: body.role_id
+    })
+      .save()
+      .catch(err => { throw new BadRequest(err.toString()) })
+
+    ctx.body = await new User({ id: savedUser.attributes.id })
+      .fetch({ withRelated: ['role'] })
+      .catch(err => { throw new InternalServerError(err.toString()) })
   }
 
   async index (ctx) {
@@ -69,12 +93,17 @@ export default class Controller {
 
   async update (ctx) {
     const { body } = ctx.request
+    const { user } = ctx.state
+
+    if (user.sub.roleName != 'admin') {
+      throw new Unauthorized('You are not ADMIN')
+    }
 
     if (body.password) {
       body.password = await hashPassword(body.password)
     }
 
-    const user = await new User({ id: ctx.params.id })
+    const authorizedUser = await new User({ id: ctx.params.id })
       .save({
         name: body.name,
         email: body.email,
@@ -83,10 +112,16 @@ export default class Controller {
       }, { method: 'update' })
       .catch(err => { throw new NotFound(err.toString()) })
 
-    ctx.body = user
+    ctx.body = authorizedUser
   }
 
   async destroy (ctx) {
+    const { user } = ctx.state
+
+    if (user.sub.roleName != 'admin') {
+      throw new Unauthorized('You are not ADMIN')
+    }
+
     await new User({ id: ctx.params.id })
       .destroy()
       .catch(err => { throw new BadRequest(err.toString()) })

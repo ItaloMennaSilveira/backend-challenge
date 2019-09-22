@@ -1,5 +1,5 @@
 import Role from '../../database/models/Role'
-import { InternalServerError, NotFound, BadRequest } from '../utils'
+import { InternalServerError, NotFound, BadRequest, Unauthorized } from '../utils'
 
 class Controller {
   async index (ctx) {
@@ -20,6 +20,12 @@ class Controller {
 
   async create (ctx) {
     const { body } = ctx.request
+    const { user } = ctx.state
+
+    if (user.sub.roleName != 'admin') {
+      throw new Unauthorized('You are not ADMIN')
+    }
+
     const role = await new Role({
       name: body.name
     })
@@ -31,6 +37,11 @@ class Controller {
 
   async update (ctx) {
     const { body } = ctx.request
+    const { user } = ctx.state
+
+    if (user.sub.roleName != 'admin') {
+      throw new Unauthorized('You are not ADMIN')
+    }
 
     const role = await new Role({ id: ctx.params.id })
       .save({
@@ -42,6 +53,12 @@ class Controller {
   }
 
   async destroy (ctx) {
+    const { user } = ctx.state
+
+    if (user.sub.roleName != 'admin') {
+      throw new Unauthorized('You are not ADMIN')
+    }
+
     await new Role({ id: ctx.params.id })
       .destroy()
       .catch(err => { throw new NotFound(err.toString()) })

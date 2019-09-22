@@ -1,14 +1,16 @@
 import Router from 'koa-router'
 import users from './users-router'
 import roles from './roles-router'
-import me from './me-router'
+import jobs from './jobs-router'
+import applications from './applications-router'
 
 const router = new Router()
 const api = new Router()
 
 api.use(users)
 api.use(roles)
-api.use(me)
+api.use(jobs)
+api.use(applications)
 
 router.use('/v1', api.routes())
 
